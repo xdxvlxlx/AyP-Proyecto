@@ -10,48 +10,63 @@ class Profesores():
         self.max_carga = Max_Carga
         self.materias = Materias
 
-    def verprofe_temp(self):
+    def info_profe(self):
         print(self.nombre, self.apellido, self.cedula, self.email, self.max_carga, self.materias)
 
-
-    def ver_profesores(self):
+    def ver_profesores_fromapi():
         x = 0
         for i in api.data_profesores:
             x += 1
             #print(json.dumps(requests_api.data_profesores[:]["Nombre"], indent=2))
             print(x, i["Nombre"], i["Apellido"])
 
-    def specific_profesor():
+    def specific_profesor_fromapi():
         x = int(input("Ingrese el numero de cedula del docente: "))
         for i in api.data_profesores:
             if x == i["Cedula"]:
                 print("Informacion del Docente:\n",json.dumps(i, indent=1), end="")
                             
-    def add_profesor(self):
-        data_list = api.data_profesores
+    def add_profesor_fromapi():
+        data = api.data_profesores
+
+        Nombre = input("Ingrese el nombre del profesor: ")
+        Apellido = input("Ingrese el apellido del profesor: ")
+        Cedula = input("Ingrese la cedula del profesor: ")
+        Email = input("Ingrese el correo del profesor: ")
+        Max_Carga = input("Ingrese la carga maxima de materias del profesor: ")
+        Materias = input("Ingrese los codigos de las materias del profesor: ")
         new_profesor = {
-            "Cedula":self.cedula,
-            "Email":self.email,
-            "Apellido":self.apellido,
-            "Nombre":self.nombre,
-            "Max Carga":self.max_carga,
-            "Materias":[self.materias]
+            "Cedula":Cedula,
+            "Email":Email,
+            "Apellido":Apellido,
+            "Nombre":Nombre,
+            "Max Carga":Max_Carga,
+            "Materias":[Materias]
         }
-        self.nombre = input("Ingrese el nombre del profesor: ")
-        self.apellido = input("Ingrese el apellido del profesor: ")
-        self.cedula = input("Ingrese la cedula del profesor: ")
-        self.email = input("Ingrese el correo del profesor: ")
-        self.max_carga = input("Ingrese la carga maxima de materias del profesor: ")
-        self.materias = input("Ingrese los codigos de las materias del profesor: ")        
-        data_list.append(new_profesor)
+        data.append(new_profesor)
+        print(api.data_profesores)
     #info_profesores()
     #specific_profesor()
+    def del_profesor_fromapi():
+        x = int(input("Ingrese el numero de cedula del docente a eliminar: "))
+        for i in api.data_profesores:
+            
+            if x == i["Cedula"]:
+                print("Informacion del Docente:\n",json.dumps(i, indent=1), end="")
+        y = input("Esta seguro que quiere eliminar este docente de la lista? (Y/N): ")
+        if y == "Y" or "y":
+            for i in api.data_profesores:
+                print(api.data_profesores.index(i))
+########################corregir
+        else:
+            print("No se elimino el docente de la lista")
+            pass
 
-def crear_objeto():
+def crear_objeto_fromapi():
     x = -1
     data = api.data_profesores
     for newobject in data:
         x += 1
         newobject = Profesores(data[x]["Nombre"],data[x]["Apellido"],data[x]["Cedula"],data[x]["Email"],data[x]["Max Carga"],data[x]["Materias"])
-        newobject.verprofe_temp()
+        newobject.info_profe()
 #crear_objeto()
