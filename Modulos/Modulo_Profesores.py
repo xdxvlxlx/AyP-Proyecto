@@ -31,36 +31,40 @@ class Profesores():
 
         Nombre = input("Ingrese el nombre del profesor: ")
         Apellido = input("Ingrese el apellido del profesor: ")
-        Cedula = input("Ingrese la cedula del profesor: ")
+        Cedula = int(input("Ingrese la cedula del profesor: "))
         Email = input("Ingrese el correo del profesor: ")
-        Max_Carga = input("Ingrese la carga maxima de materias del profesor: ")
-        Materias = input("Ingrese los codigos de las materias del profesor: ")
+        Max_Carga = int(input("Ingrese la carga maxima de materias del profesor: "))
+        x = Max_Carga
+        list_materias = []
+        while x > 0:
+            list_materias.append(input("Ingrese los codigos de las materias del profesor: "))
+            x -= 1
         new_profesor = {
             "Cedula":Cedula,
             "Email":Email,
             "Apellido":Apellido,
             "Nombre":Nombre,
             "Max Carga":Max_Carga,
-            "Materias":[Materias]
+            "Materias":list_materias
         }
         data.append(new_profesor)
-        print(api.data_profesores)
+        print("Nuevo docente registrado:\n",json.dumps(new_profesor, indent=1), end="")
     #info_profesores()
     #specific_profesor()
     def del_profesor_fromapi():
+        z = -1
         x = int(input("Ingrese el numero de cedula del docente a eliminar: "))
         for i in api.data_profesores:
-            
+            z += 1
             if x == i["Cedula"]:
                 print("Informacion del Docente:\n",json.dumps(i, indent=1), end="")
-        y = input("Esta seguro que quiere eliminar este docente de la lista? (Y/N): ")
-        if y == "Y" or "y":
-            for i in api.data_profesores:
-                print(api.data_profesores.index(i))
-########################corregir
-        else:
-            print("No se elimino el docente de la lista")
-            pass
+                y = input("Esta seguro que quiere eliminar este docente de la lista? (Y/N): ")
+                if y == "Y" or "y":
+                    api.data_profesores.pop(z)
+                    return 
+                else:
+                    print("No se elimino el docente de la lista")
+                    pass
 
 def crear_objeto_fromapi():
     x = -1
