@@ -1,4 +1,4 @@
-import requests_api
+from . import requests_api as api
 import json
 
 class Materias():

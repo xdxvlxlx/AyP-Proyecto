@@ -1,4 +1,4 @@
-import requests_api as api
+from . import requests_api as api
 import csv
 
 #json.dumps(api.data_profesores, indent=1)
