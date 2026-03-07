@@ -49,8 +49,7 @@ class Profesores():
         }
         data.append(new_profesor)
         print("Nuevo docente registrado:\n",json.dumps(new_profesor, indent=1), end="")
-    #info_profesores()
-    #specific_profesor()
+
     def del_profesor_fromapi():
         z = -1
         x = int(input("Ingrese el numero de cedula del docente a eliminar: "))
@@ -64,6 +63,26 @@ class Profesores():
                     return 
                 else:
                     print("No se elimino el docente de la lista")
+                    pass
+
+    def modlistmateriasprofe_fromapi():
+        data = api.data_profesores
+        z = -1
+        x = int(input("Ingrese el numero de cedula del docente al que se le modificara la lista de materias: "))
+        for i in api.data_profesores:
+            z += 1
+            if x == i["Cedula"]:
+                print("Informacion del Docente:\n",json.dumps(i["Materias"], indent=1))
+                y = input("1. Agregar Materias\n2. Eliminar Materias\n3. Volver al menu anterior\n")
+                if y == "1":
+                    newmateria = input("Ingrese el codigo de la nueva materia: ")
+                    data[z]["Materias"].append(newmateria)
+                    print("Materia añadida con exito!\n",data[z]["Materias"],"\n")
+                if y == "2":
+                    materia = input("Ingrese el codigo de la materia a eliminar: ")
+                    data[z]["Materias"].remove(materia)
+                    print("Materia eliminada\n",data[z]["Materias"],"\n")
+                if y == "3":
                     pass
 
 def crear_objeto_fromapi():
