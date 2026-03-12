@@ -1,74 +1,93 @@
 from . import requests_api as api
-import json
+from . import Modulo_Profesores
 
+lista_final_materias = []
 class Materias():
-    def __init__(self, Código, Nombre, Secciones):
-        self.codigo = Código
-        self.nombre = Nombre
-        self.secciones = Secciones
+    def __init__(self, nombre, codigo, secciones):
+        self.nombre = nombre
+        self.codigo = codigo
+        self.secciones = secciones
     
-    def ver_materias_fromapi():
+    def __str__(self):
+        return f"Informacion de la materia:\n\nNombre: {self.nombre}\nCodigo: {self.codigo}\nSecciones: {self.secciones}\n"
+
+    def crear_objeto():
         x = 0
-        for i in api.data_materias:
+        data = api.data_materias
+        for newobject in data:
+            newobject = Materias(data[x]["Nombre"],data[x]["Código"],data[x]["Secciones"])
+            lista_final_materias.append(newobject)
             x += 1
-            #print(json.dumps(requests_api.data_profesores[:]["Nombre"], indent=2))
-            print(x,i["Nombre"])
+        return lista_final_materias
 
-    def specific_materia_fromapi():
-        x = input("Ingrese el codigo de la materia: ")
-        for i in api.data_materias:
-            if x == i["Código"]:
-                print("Informacion de la materia:\n",json.dumps(i, indent=1))
-                #return
+def ver_materia():
+    z = 0
+    for materia in lista_final_materias:
+        z += 1
+        print(f"{z}",materia.nombre)
+
+def specific_materia():
+    x = input("Ingrese el codigo de la materia: ")
+    for materia in lista_final_materias:
+        if materia.codigo == x:
+            return materia
                             
-    def add_materia_fromapi():
-        data = api.data_materias
 
-        Nombre = input("Ingrese el nombre de la materia: ")
-        Codigo = input("Ingrese el codigo de la materia: ")
-        Secciones = int(input("Ingrese la cantidad de secciones de la materia: "))
-        new_materia = {
-            "Código":Codigo,
-            "Nombre":Nombre,
-            "Secciones":Secciones,
-        }
-        data.append(new_materia)
-        print("Nueva materia registrada:\n",json.dumps(new_materia, indent=1), end="")
+def add_materia():
+    nombre = input("Ingrese el nombre de la materia: ")
+    codigo = input("Ingrese el codigo de la materia: ")
+    secciones = int(input("Ingrese la cantidad de secciones de la materia: "))
+    newobject = Materias(nombre, codigo, secciones)
+    print(newobject)
+    lista_final_materias.append(newobject)
 
-    def del_materia_fromapi():
-        z = -1
-        x = input("Ingrese el codigo de la materia a eliminar: ")
-        for i in api.data_materias:
-            z += 1
-            if x == i["Código"]:
-                print("Informacion de la materia:\n",json.dumps(i, indent=1), end="")
-                y = input("Esta seguro que quiere eliminar esta materia de la lista? (Y/N): ")
-                if y == "Y" or "y":
-                    api.data_materias.pop(z)
-                    return 
-                else:
-                    print("No se elimino la materia de la lista")
-                    pass
+def del_materia():
+    z = -1
+    x = input("Ingrese el codigo de la materia a eliminar: ")
+    for materia in lista_final_materias:
+        z += 1
+        if x == materia.codigo:
+            print(materia)
+            y = input("Esta seguro que quiere eliminar esta materia de la lista? (Y/N): ")
+            if y == "Y" or "y":
+                lista_final_materias.pop(z)
+                print("La materia ha sido eliminada")
+                return 
+            else:
+                print("No se elimino la materia de la lista")
+                pass  
 
-    def modseccionmateria_fromapi():
-        data = api.data_materias
-        z = -1
-        x = input("Ingrese el codigo de la materia al que se le modificara el numero de secciones: ")
-        for i in api.data_materias:
-            z += 1
-            if x == i["Código"]:
-                print("Informacion de la materia:\n",i["Nombre"],"\n","Secciones:",i["Secciones"])
-                newsecc = int(input("Ingrese el nuevo numero de secciones: "))
-                data[z]["Secciones"] = newsecc
-                print("Seccion cambiada con exito!\n",i["Nombre"],"\n","Nuevo nro de secciones:",i["Secciones"])
-    def materia_asociada_fromapi():
-        data = api.data_profesores
+def modseccionmateria():
+    z = -1
+    x = input("Ingrese el codigo de la materia al que se le modificara el numero de secciones: ")
+    for materia in lista_final_materias:
+        z += 1
+        if x == materia.codigo:
+            print(materia)
+            newsecc = int(input("Ingrese el nuevo numero de secciones: "))
+            materia.secciones = newsecc
+            print("Seccion cambiada con exito!\n",materia.nombre,"\n","Nuevo nro de secciones:",materia.secciones)
+
+def materia_asociada():
         z = -1
         x = input("Ingrese el codigo de la materia para ver que profesores estan asociados: ")
-        for i in api.data_profesores:
+        for profe in Modulo_Profesores.lista_final_profesor:
             z += 1
-            if x in i["Materias"]:
-                print("\n",i["Nombre"], i["Apellido"],i["Cedula"],"\nLista de materias:", i["Materias"],"\n")
+            if x in profe.materias:
+                #print("\n",i["Nombre"], i["Apellido"],i["Cedula"],"\nLista de materias:", i["Materias"],"\n")
+                print(profe.nombre, profe.apellido, profe.cedula, "\nlista de materias: ",profe.materias, "\n")
             #else:
                 #print("No se encontro ningun profesor asociada a la materia",x)
                 #return
+
+    # def materia_asociada_fromapi():
+    #     data = api.data_profesores
+    #     z = -1
+    #     x = input("Ingrese el codigo de la materia para ver que profesores estan asociados: ")
+    #     for i in api.data_profesores:
+    #         z += 1
+    #         if x in i["Materias"]:
+    #             print("\n",i["Nombre"], i["Apellido"],i["Cedula"],"\nLista de materias:", i["Materias"],"\n")
+    #         #else:
+    #             #print("No se encontro ningun profesor asociada a la materia",x)
+    #             #return
